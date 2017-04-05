@@ -1,5 +1,6 @@
 # GoShell
 This is an implementation of shell in Go (Golang)
+[![Build Status]]
 
 ## To run this shell
 
