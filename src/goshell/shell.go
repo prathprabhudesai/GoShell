@@ -4,7 +4,7 @@ package main
 import(
 	"bufio"
 	"fmt"
-	"shell/parser"
+	"goshell/parser"
 	"os"
 	"github.com/fatih/color"
 	"path/filepath"

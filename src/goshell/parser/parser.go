@@ -31,7 +31,12 @@ func Parse(command string) bool {
 			cd(strings.Join(result[1:]," "))
 		} else {
 			cd(".")
-		} 
+		}
+
+	case "mkdir":
+		if len(result) > 1 {
+			mkdir(strings.Join(result[1:]," "))
+		}
 		
 	case "history":
 		printHistory()
@@ -86,17 +91,13 @@ func printHistory(){
 	} 
 }
 
-// Change Directory
 
-func cd (path string) {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	var abs string
-	if err != nil {
-		fmt.Println("Runtime buffer error")
-	}
+// make absolute path
 
+func getAbsPath(dir string, path string) string {
 	current_dir := strings.Split(dir,"/")
 	change_dir := strings.Split(path,"/")
+	var abs string
 	if(len(change_dir) > 1) {
 		if (change_dir[1] == current_dir[1]){
 			abs = path
@@ -104,9 +105,34 @@ func cd (path string) {
 	} else {
 		abs = fmt.Sprintf("%v/%v",dir,path)
 	}
+	return abs
+}
+
+
+// Change Directory
+
+func cd (path string) {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0])) 
+	if err != nil {
+		fmt.Println("Runtime buffer error")
+	}
+	abs := getAbsPath(dir,path)
 	err_cd := os.Chdir(abs)
 	if(err_cd != nil){
 		fmt.Printf("Directory not present!!\n")
+	}		
+}
+
+// Make Directory
+func mkdir (path string) {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0])) 
+	if err != nil {
+		fmt.Println("Runtime buffer error")
+	}
+	abs := getAbsPath(dir,path)
+	err_dir := os.MkdirAll(abs, 0755) 
+	if(err_dir != nil ){
+		fmt.Println("Could not create the directory %v",path)
 	}
 		
 }
